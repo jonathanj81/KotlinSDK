@@ -2,9 +2,12 @@ package com.telemetrydeck.sdk
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.logging.*
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.DEFAULT
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -16,7 +19,7 @@ import java.util.*
  */
 internal class TelemetryClient(private val telemetryAppID: UUID, private val apiBaseURL: URL, private val showDebugLogs: Boolean, private val debugLogger: DebugLogger?) {
     private val client: HttpClient = HttpClient(CIO) {
-        install(JsonFeature)
+        install(ContentNegotiation)
         if (showDebugLogs && debugLogger != null) {
             install(Logging) {
                 logger = Logger.DEFAULT
@@ -35,7 +38,7 @@ internal class TelemetryClient(private val telemetryAppID: UUID, private val api
         val response: HttpResponse = client.request {
             method = HttpMethod.Post
             url(getServiceUrl())
-            body = signals
+            setBody(signals)
         }
         println(response.status)
         client.close()

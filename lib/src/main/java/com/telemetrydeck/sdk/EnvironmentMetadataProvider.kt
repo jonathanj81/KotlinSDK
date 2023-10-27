@@ -52,7 +52,7 @@ class EnvironmentMetadataProvider : TelemetryProvider {
         }
         metadata["architecture"] = System.getProperty("os.arch") ?: ""
         metadata["operatingSystem"] = "Android"
-        metadata["telemetryClientVersion"] = BuildConfig.LIBRARY_PACKAGE_NAME
+        metadata["telemetryClientVersion"] = "KotlinSDK forked"
         this.enabled = true
     }
 
